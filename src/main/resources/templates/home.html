@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+<h1 th:text="${msg}">mursurg</h1>
+
+<h3>URL Shortener, how to use it:</h3>
+<ul>
+    <li>Put the link you want shortened into the first textbox, then click its button</li>
+    <li>Take the code and put it as an argument into the URL (e.g localhost:8080/Abc123)</li>
+    <li>Be redirected!</li>
+</ul>
+</body>
+</html>
