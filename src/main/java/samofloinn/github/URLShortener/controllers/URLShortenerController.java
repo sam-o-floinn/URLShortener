@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import samofloinn.github.URLShortener.CodeObject;
 import samofloinn.github.URLShortener.UrlObject;
-import samofloinn.github.URLShortener.helper.UrlShortenerControllerHelper;
 import samofloinn.github.URLShortener.repositories.CodeRepository;
 import samofloinn.github.URLShortener.repositories.UrlRepository;
 
@@ -30,8 +29,6 @@ public class URLShortenerController {
     private UrlRepository urlRepository;
     @Autowired
     private CodeRepository codeRepository;
-
-    //ivate UrlShortenerControllerHelper hlper;
 
     @RequestMapping("/shorten")
     @GetMapping("/shorten")
