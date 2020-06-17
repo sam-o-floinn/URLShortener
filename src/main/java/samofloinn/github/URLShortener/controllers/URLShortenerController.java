@@ -36,6 +36,7 @@ public class URLShortenerController {
                                 @RequestParam(required = false) String code,
                                 @RequestParam(required = false) String id) {
         log.info("URL to shorten(): " + url);
+        log.info("AAAAAAAA");
         boolean goodCode = false;
         String newCode = !isNull(code) && !code.isEmpty() ? code : getCode(); //random code if code param is not set or is empty
 
@@ -65,7 +66,6 @@ public class URLShortenerController {
         log.info("goToUrl(). Code = " + code);
         log.info("Test for Docker!");
         UrlObject matchingId = urlRepository.findOneByShortUrl(code);
-        log.info("back in goToUrl() from listUrlObjects()");
 
         if (matchingId == null) log.info("no ID matches");
 
