@@ -1,5 +1,8 @@
 package samofloinn.github.URLShortener;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +16,8 @@ public class CodeObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Getter
+    @Setter
     private String code;
 
     // == constructor ==
@@ -21,17 +26,5 @@ public class CodeObject {
     }
 
     public CodeObject() {
-
-    }
-
-    // == getters ==
-    public String getCode() {
-        return code;
-    }
-
-    // == setters ==
-
-    public void setCode(String code) {
-        this.code = code;
     }
 }

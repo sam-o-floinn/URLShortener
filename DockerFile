@@ -1,6 +1,6 @@
-FROM fabric8/java-alpine-openjdk11-jre
+FROM fabric8/java-alpine-openjdk11-jre as build
 RUN addgroup -S spring && adduser -S spring -G spring
-EXPOSE 8484
+EXPOSE 8080
 USER spring:spring
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar

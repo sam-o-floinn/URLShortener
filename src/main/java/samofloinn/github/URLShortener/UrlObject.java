@@ -8,8 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Slf4j
+@Getter
+@Setter
 @Entity
 public class UrlObject {
 
@@ -21,28 +24,22 @@ public class UrlObject {
     private String shortUrl;
     private String longUrl;
     int timesClicked;
+    private Date dateCreated;
+    private Date lastClicked;
 
     // == constructors ==
-    public UrlObject(String shortUrl, String longUrl) {
+    public UrlObject(String shortUrl, String longUrl, Date dateCreated) {
         this.shortUrl = shortUrl;
         this.longUrl = longUrl;
+        this.dateCreated = dateCreated;
     }
 
     public UrlObject() {
     }
 
-    // == getters ==
-    public long getId() { return id; }
-    public String getShortUrl() { return shortUrl; }
-    public String getLongUrl() { return longUrl; }
-    public int getTimesClicked() { return timesClicked; }
-
-    // == setters ==
-    public void setId(long newId) { id = newId; }
-    public void setShortUrl(String newShort) { shortUrl = newShort; }
-    public void setTimesClicked(int times) { timesClicked = times; }
-    public void setLongUrl(String newLong) { longUrl = newLong; }
-
     // == functions ==
-    public void click() { timesClicked++; }
+    public void click() {
+        timesClicked++;
+        lastClicked = new Date();
+    }
 }
