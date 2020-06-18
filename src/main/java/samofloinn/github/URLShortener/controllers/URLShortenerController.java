@@ -3,7 +3,6 @@ package samofloinn.github.URLShortener.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +13,7 @@ import samofloinn.github.URLShortener.repositories.CodeRepository;
 import samofloinn.github.URLShortener.repositories.UrlRepository;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 import static java.util.Objects.isNull;
@@ -35,53 +32,39 @@ public class URLShortenerController {
     public String routeShortURL(@RequestParam String url,
                                 @RequestParam(required = false) String code,
                                 @RequestParam(required = false) String id) {
-        log.info("URL to shorten(): " + url);
-        boolean goodCode = false;
         String newCode = !isNull(code) && !code.isEmpty() ? code : getCode(); //random code if code param is not set or is empty
 
-        if(!isNull(code)) {
-            log.info("Hi code: " + code);
-        }
-        if (!isNull(id)) {
+        if (!isNull(id)) { //for future reference, if we ever wish to verify a user's ID for this step
             log.info("Check if I'm a verified ID!");
         }
 
         newCode = checkCode(newCode);
         codeRepository.saveAndFlush(new CodeObject(newCode));
 
+        //quickly verify the string starts with http://
         url = httpCheck(url);
-        log.info("Url after httpCheck: " + url);
 
+        //save to DB
         UrlObject newUrl = new UrlObject(newCode, url, new Date());
         urlRepository.saveAndFlush(newUrl);
 
-        log.info("short code for " + newUrl.getLongUrl() + " is " + newUrl.getShortUrl());
+        //in lieu of a ViewResolver
         return "";
     }
 
     // == go to URL from repo ==
     @GetMapping("/go/{code}")
     public void goToUrl(@PathVariable String code, HttpServletResponse httpServletResponse) {
-        log.info("goToUrl(). Code = " + code);
-        log.info("Test for Docker!");
         UrlObject matchingId = urlRepository.findOneByShortUrl(code);
-
-        if (matchingId == null) log.info("no ID matches");
-
         String longUrl = matchingId.getLongUrl();
 
-        log.info("We got the longUrl " + longUrl);
-
+        //update repo
         matchingId.click();
-        matchingId = urlRepository.save(matchingId);
-        log.info("Url clicked " + matchingId.getTimesClicked());
-        log.info(code + " is taking us to " + longUrl);
+        urlRepository.save(matchingId);
 
         httpServletResponse.setHeader("Location", longUrl);
         httpServletResponse.setStatus(302);
     }
-
-
 
     // == helper methods ==
     /*
@@ -92,7 +75,7 @@ public class URLShortenerController {
         Random r = new Random();
 
         String code = "";
-        String chars = "123xyz";
+        String chars = "123xyz"; //can expand this as needs be
         for (int i = 0; i < 6; i++) {
             code += chars.charAt(r.nextInt(chars.length()));
         }
@@ -101,15 +84,13 @@ public class URLShortenerController {
     }
 
     /*
-        checkCode(String code):
-        confirms the given code is not already assigned to another URL. If it is, generate a new one.
+     * checkCode(String code):
+     * confirms the given code is not already assigned to another URL. If it is, generate a new one.
      */
     public String checkCode(String code) {
         if (codeRepository.findOneByCode(code) != null) {
-            log.info("We already have this code " + code + " in repository: " + codeRepository.findOneByCode(code).getCode());
             return checkCode(getCode());
-        }
-        log.info("We can add this code, " + code);
+        } //code isn't already in repo, so we can add it
         return code;
     }
 
