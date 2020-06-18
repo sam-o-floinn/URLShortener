@@ -23,7 +23,7 @@ public class UrlObject {
 
     private String shortUrl;
     private String longUrl;
-    int timesClicked;
+    private int timesClicked;
     private Date dateCreated;
     private Date lastClicked;
 

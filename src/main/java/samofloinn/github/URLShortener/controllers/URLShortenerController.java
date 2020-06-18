@@ -36,7 +36,6 @@ public class URLShortenerController {
                                 @RequestParam(required = false) String code,
                                 @RequestParam(required = false) String id) {
         log.info("URL to shorten(): " + url);
-        log.info("AAAAAAAA");
         boolean goodCode = false;
         String newCode = !isNull(code) && !code.isEmpty() ? code : getCode(); //random code if code param is not set or is empty
 
@@ -47,7 +46,7 @@ public class URLShortenerController {
             log.info("Check if I'm a verified ID!");
         }
 
-        checkCode(newCode);
+        newCode = checkCode(newCode);
         codeRepository.saveAndFlush(new CodeObject(newCode));
 
         url = httpCheck(url);
