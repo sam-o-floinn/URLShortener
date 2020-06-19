@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS Url_Object (
+CREATE TABLE IF NOT EXISTS Url_Mapping (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   short_Url VARCHAR(250) NOT NULL,
   long_Url VARCHAR(250) NOT NULL,
@@ -7,7 +7,5 @@ CREATE TABLE IF NOT EXISTS Url_Object (
   last_Clicked DATE
 );
 
-INSERT INTO Url_Object (short_Url, long_Url, times_Clicked, date_Created) VALUES
+INSERT INTO Url_Mapping (short_Url, long_Url, times_Clicked, date_Created) VALUES
   ('co21W', 'https://www.google.com', 0, CURRENT_DATE);
-
-INSERT INTO Code_Object(id, code) VALUES (0, 'co21W');

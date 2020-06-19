@@ -1,4 +1,4 @@
-package samofloinn.github.URLShortener;
+package samofloinn.github.UrlShortener;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

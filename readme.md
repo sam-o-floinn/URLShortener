@@ -1,25 +1,25 @@
 # URL Shortener
 ## How to run this project:
 ##### a) Run as Docker image
-Install Docker onto your computer. Pull the docker image with `docker pull samtrombone/url_shortener:beta`. Then run it on port 8080 with `docker run -p 8080:8080 samtrombone/url_shortener:beta`
+Install Docker onto your computer. Pull the docker image with `docker pull samtrombone/url_shortener:dev`. Then run it on port 8080 with `docker run -p 8080:8080 samtrombone/url_shortener:dev`
 ##### b) Run after Git download
 Clone or download the ZIP of the URLShortener project [from the Git repository](https://github.com/sam-o-floinn/URLShortener). The project can be run in a java IDE like IntelliJ, by selecting the *UrlShortenerApplication* class and running it.
 
 ## Table of Contents
-1. Introduction Overview
-2. Statistical Views
-⋅⋅* Repository Information
-⋅⋅* H2 database
-⋅⋅* Docker statistics
-3. File Runthrough
-⋅⋅* Application and Entities
-⋅⋅* Repositories
-⋅⋅* Controllers
-⋅⋅* Properties and SQL
-
-4. Test Cases
-⋅⋅* Tests for shortening the URL
-⋅⋅* Tests for resolving codes to URLs given
+#### 1. Introduction Overview
+#### 2. Statistical Views
+###### Repository Information
+###### H2 database
+###### Docker statistics
+#### 3. File Runthrough
+###### Application and Entities
+###### Repositories
+###### Controllers
+###### Services
+###### Properties and SQL
+#### 4. Test Cases
+###### Tests for shortening the URL
+###### Tests for resolving codes to URLs given
 
 ---
 
@@ -28,8 +28,7 @@ This is a server-side RESTful API that has two primary functions: create short c
 
 ## 2: Statistical Views
 #### a) Urls
-Through the Spring repositories, there are two noticeable paths we can view from the default URL (e.g localhost:8080). 'urls' and 'codes', which are created from repositories.
-"urls" will show all the short-URLs created, from the long URLs to their short URL code plus the times that a given link has been clicked. "codes" simply shows the codes created.
+Thanks to a Spring repository, we can view from the default URL, *urls* (e.g `localhost:8080/urls`). This lists all the URL mappnig objects in the repo, from the long URLs to their short URL code. It also has extra statistics like the times that a given link has been clicked.
 #### b) h2-console
 Spring h2 Hibernate offers a database to store our info. This is persistent as long as the application has been run for. At the 'h2-console' end point, log in using the values as listed in *application.properties*. A web interface to a h2 database will let you run SQL queries to view any data on the repositories as desired.
 #### c) Docker stats
@@ -38,23 +37,25 @@ In the default docker dashboard, you can inspect the file's CPU usage, memory us
 ## 3: File Runthrough:
 #### a) Applications and Entities:
 There is only one application class, the *UrlShortenerApplication* class.
-There are two entities. One to represent a code object *(CodeObject)*, another to represent a code-URL pair plus other relevant statistics *(UrlObject)*. I chose to represent these as entities not only to succinctly refer to them in the database, and throughout the project as autowired repositories, but also so I could customise the fields with potentially relevant data. For instance, the UrlObject does not just contain the *shortUrl* and the *longUrl* fields, it also contains a field to show how many times they've been clicked
+This uses an entity *(UrlObject)* to represent a shortURL-longURL pair plus other relevant statistics. I chose to represent these as entities not only to succinctly refer to them in the database, and throughout the project as autowired repositories, but also so I could customise the fields with potentially relevant data. For instance, the UrlObject does not just contain the *shortUrl* and the *longUrl* fields, it also contains a field to show how many times they've been clicked, the dates it was created and last clicked.
 #### b) Repositories
-There's a repository each for CodeObject and UrlObject: *CodeRepository* and *UrlRepository*. The path to the URL where you can see their codes on the site is assigned in the argument to each one's `@RepositoryRestResource` notation. e.g CodeRepository's is 'codes', so it can be accessed via `localhost:port/codes`.
+There's a repository for UrlObject: *UrlRepository*. The path to the URL where you can see its data on a web browser is in the `@RepositoryRestResource` notation. UrlRepository's is 'urls', so it can be accessed via `localhost:port/urls`.
 #### c) Controllers
-This project needs essentially one controller for one directory.
-There are some 'helper' functions here which do not respond to mappings or redirect. Conventionally I would put these in their own class separate from the routing logic. In past commercial projects of mine these would be helper classes: in Spring they are typically the Controller objects, as the Service routes.
-This controller also contains mappings for business logic, as opposed to a Service class doing so. While I consider Service classes to be good practice for a full-stack Spring MVC project, a server-side API was relatively new to me. So given the scope of the project, I was concerned of such being superfluous. It is something I'd consider doing in a review of the project.
-#### d) Properties and SQL
+This project needs essentially one controller for one directory. There are two primary functions, which simply call the Service object's functions of the same name. Hence this controller maps these methods to the Service.
+#### d) Services
+The two primary functions here are `routeShortUrl()` and `goToUrl()`. The former takes a normal URL param and makes a Url Mapping of it (it can also take an optional `shortURL` param if the user wants the link to have a specific shortUrl). The latter takes a short URL param, finds a matching object in the UrlRepository, and redirects to the matching URL.
+There are some 'helper' functions here to make the Service code more maintainable and readable. `httpCheck(url)` checks if the given string starts with 'http://', to rectify errors that emerge when the link lacks this prefix (e.g *www.google.com*). `validateShortUrl(shortUrl)` checks if the given shortUrl by the user is valid and not matched to a UrlMapping object in the repository already. `getRandomString()` generates a random alphanumeric 6-digit string to use as our shortUrl.
+
+#### e) Properties and SQL
 The application.properties file contains the configurations for the project's h2 database. The password, name, username and such can be adjusted here.
-data.sql sets up the initial Url_Object table. It also initialises this table (and the automatically made Code_Object table) with a first dummy shortURL for www.google.com. This value is used for testing and is not configured to a variable.
+data.sql sets up the initial Url_Object table. It also initialises this table (and the automatically made Url_Object table) with a first dummy shortURL for the long URL *www.google.com*, for the sake of testing.
 
 ## 4: Test Cases
 Note that some tests will need the machine to be running in order to work correctly. 
 To verify and demonstrate functionality, some simple test cases have been created. Two for the act of shortening a URL, two for the act of redirecting to one.
 #### a) Shorten URL tests
-"actualUrlReturns200" test gives a proper URL and should return a successful 200 HTTP status. 
-"notUrlReturns500" runs the same procedure but with a string that is not a URL, and expects a ClientProtocolException.
+`shortenUrl_ActualUrl_ReturnsTrue`" test gives a proper URL and should assert it maps correctly.
+`shortenUrl_NotUrl_HttpHostConnectException` runs the same procedure but with a string that is not a correct URL, and expects a HttpHostConnectionException.
 #### b) Resolve URL tests
-*badCodeReturns500* gives a non-existent URL which should cause an exception
-*goodCodeReturns200* gives the code of the first database entry, created once the application is started up, and should return a 200 HTTP status number.
+`goToUrl_BadShortUrl_Returns500` gives a short URL which does not exist in our UrlRepository, and should cause an exception.
+`goToUrl_GoodShortUrl_Returns200` gives a short URL that does exist in the repository, as initialised in *data.sql*, and should return a 200 HTTP status number.
