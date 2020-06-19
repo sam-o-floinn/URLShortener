@@ -6,20 +6,20 @@ Install Docker onto your computer. Pull the docker image with `docker pull samtr
 Clone or download the ZIP of the URLShortener project [from the Git repository](https://github.com/sam-o-floinn/URLShortener). The project can be run in a java IDE like IntelliJ, by selecting the *UrlShortenerApplication* class and running it.
 
 ## Table of Contents
-#### 1. Introduction Overview
-#### 2. Statistical Views
-###### Repository Information
-###### H2 database
-###### Docker statistics
-#### 3. File Runthrough
-###### Application and Entities
-###### Repositories
-###### Controllers
-###### Services
-###### Properties and SQL
-#### 4. Test Cases
-###### Tests for shortening the URL
-###### Tests for resolving codes to URLs given
+### 1. Introduction Overview
+### 2. Statistical Views
+##### a) Repository Information
+##### b) H2 database
+##### c) Docker statistics
+### 3. File Runthrough
+##### a) Application and Entities
+##### b) Repositories
+##### c) Controllers
+##### d) Services
+##### e) Properties and SQL
+### 4. Test Cases
+##### a) Tests for shortening the URL
+##### b) Tests for resolving codes to URLs given
 
 ---
 
