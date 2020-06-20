@@ -1,7 +1,7 @@
 # URL Shortener
 ## How to run this project:
 ##### a) Run as Docker image
-Install Docker onto your computer. Pull the docker image with `docker pull samtrombone/urlshortener:dev`. Then run it on port 8080 with `docker run -p 8080:8080 samtrombone/url_shortener:dev`
+Install Docker onto your computer. Pull the docker image with `docker pull samtrombone/urlshortener:dev`. Then run it on port 8080 with `docker run -p 8080:8080 samtrombone/urlshortener:dev`
 ##### b) Run after Git download
 Clone or download the ZIP of the URLShortener project [from the Git repository](https://github.com/sam-o-floinn/URLShortener). The project can be run in a java IDE like IntelliJ, by selecting the *UrlShortenerApplication* class and running it.
 
